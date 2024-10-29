@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 
 
-// Set the fully constructed connection string
+//set connection string
 builder.Services.AddDbContext < ApplicationDbContext > (options =>
     options.UseSqlServer(connectionStringBuilder.ConnectionString));
 ```
