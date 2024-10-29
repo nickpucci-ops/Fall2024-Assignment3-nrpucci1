@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Fall2024_Assignment3_nrpucci1.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
