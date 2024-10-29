@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Fall2024_Assignment3_nrpucci1.Models.Movie>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Movies";
 }
 
-<h1>Index</h1>
+<h1>Movies</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,16 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ImdbLink)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Genre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.YearOfRelease)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.YearOfRelease)
+                @Html.DisplayNameFor(model => model.ImdbLink)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PosterURL)
@@ -34,16 +34,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ImdbLink)
+                @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Genre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.YearOfRelease)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.YearOfRelease)
+                @Html.DisplayFor(modelItem => item.ImdbLink)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PosterURL)
