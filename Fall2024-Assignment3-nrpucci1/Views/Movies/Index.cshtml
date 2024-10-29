@@ -12,48 +12,33 @@
 <table class="table datatables">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.YearOfRelease)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImdbLink)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PosterURL)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Genre)</th>
+            <th>@Html.DisplayNameFor(model => model.YearOfRelease)</th>
+            <th>@Html.DisplayNameFor(model => model.ImdbLink)</th>
+            <th>@Html.DisplayNameFor(model => model.PosterURL)</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.YearOfRelease)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImdbLink)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PosterURL)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Genre)</td>
+                <td>@Html.DisplayFor(modelItem => item.YearOfRelease)</td>
+                <td>
+                    <a href="@item.ImdbLink" target="_blank">@Html.DisplayFor(modelItem => item.ImdbLink)</a>
+                </td>
+                <td>
+                    <img src="@item.PosterURL" alt="Movie Poster" style="width:50px; height:auto;" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
