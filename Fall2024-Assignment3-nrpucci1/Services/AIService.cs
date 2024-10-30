@@ -47,6 +47,19 @@ namespace Fall2024_Assignment3_nrpucci1.Services
         {
             var reviews = new List<(string Review, double SentimentScore)>();
 
+            if (!_isApiConfigured)
+            {
+                // Return mock data
+                reviews = new List<(string Review, double SentimentScore)>
+                {
+                    ("An outstanding performance and a captivating story!", 0.85),
+                    ("The movie was okay, but could have been better.", 0.0),
+                    ("I didn't enjoy the film; it was quite disappointing.", -0.6),
+                        // Add more mock reviews if needed
+                };
+                return reviews;
+            }
+
             // Define personas
             string[] personas = { "is harsh", "loves romance", "loves comedy", "loves thrillers", "loves fantasy" };
 
@@ -86,6 +99,17 @@ namespace Fall2024_Assignment3_nrpucci1.Services
         public async Task<List<(string Tweet, double SentimentScore)>> GenerateActorTweetsAsync(string actorName)
         {
             var tweets = new List<(string Tweet, double SentimentScore)>();
+            if (!_isApiConfigured)
+            {
+                // Return mock data
+                tweets = new List<(string Tweet, double SentimentScore)>
+                {
+                    ($"Just watched a movie starring {actorName}, and it was fantastic!", 0.9),
+                    ($"{actorName} is so overrated.", -0.7),
+                    ($"{actorName}'s latest performance was absolutely brilliant.", 0.8),
+                };
+                return tweets;
+            }
 
             // Get ChatClient
             ChatClient chatClient = _client.GetChatClient(_aiDeployment);

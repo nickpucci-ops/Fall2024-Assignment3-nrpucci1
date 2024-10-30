@@ -1,42 +1,35 @@
 ﻿using System;
-using System.ClientModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure;
-using Azure.AI.OpenAI;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_nrpucci1.Data;
 using Fall2024_Assignment3_nrpucci1.Models;
-using VaderSharp2; //used for the sentiment analysis
 using Fall2024_Assignment3_nrpucci1.Services;
-
 
 namespace Fall2024_Assignment3_nrpucci1.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly AzureOpenAIClient _openAiClient;
-        private readonly SentimentIntensityAnalyzer _sentimentAnalyzer;
         private readonly AIService _aiService;
 
         public MoviesController(ApplicationDbContext context, AIService aiService)
         {
             _context = context;
-
-            //OpenAI client (replace with actual endpoint and key from secrets)
-            string endpoint = "https://your-openai-resource-name.openai.azure.com/";
-            string apiKey = "Azure_OpenAI_Key";
-            _openAiClient = new AzureOpenAIClient(new Uri(endpoint), new ApiKeyCredential(apiKey));
-
-
-            //sentiment analyzer initialization
-            _sentimentAnalyzer = new SentimentIntensityAnalyzer();
+            _aiService = aiService;
         }
 
-        // GET: Movies/Details/5
+        // **GET: Movies**
+        public async Task<IActionResult> Index()
+        {
+            var movies = await _context.Movies.ToListAsync();
+            return View(movies);
+        }
+
+        // **GET: Movies/Details/5**
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -50,7 +43,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             // Generate AI reviews using the AIService
             var reviewsWithScores = await _aiService.GenerateMovieReviewsAsync(
                 movie.Title,
-                movie.YearOfRelease.ToString(),
+                movie.YearOfRelease,
                 "Director Name" // Replace with actual director if available
             );
 
@@ -79,6 +72,90 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             };
 
             return View(viewModel);
+        }
+
+        // **GET: Movies/Create**
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // **POST: Movies/Create**
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Title,Genre,YearOfRelease,ImdbLink,PosterURL")] Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(movie);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(movie);
+        }
+
+        // **GET: Movies/Edit/5**
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var movie = await _context.Movies.FindAsync(id);
+            if (movie == null) return NotFound();
+
+            return View(movie);
+        }
+
+        // **POST: Movies/Edit/5**
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Genre,YearOfRelease,ImdbLink,PosterURL")] Movie movie)
+        {
+            if (id != movie.Id) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(movie);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!MovieExists(movie.Id)) return NotFound();
+                    else throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(movie);
+        }
+
+        // **GET: Movies/Delete/5**
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var movie = await _context.Movies
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null) return NotFound();
+
+            return View(movie);
+        }
+
+        // **POST: Movies/Delete/5**
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var movie = await _context.Movies.FindAsync(id);
+            if (movie != null) _context.Movies.Remove(movie);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool MovieExists(int id)
+        {
+            return _context.Movies.Any(e => e.Id == id);
         }
     }
 }
