@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ClientModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,23 +10,27 @@ using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_nrpucci1.Data;
 using Fall2024_Assignment3_nrpucci1.Models;
 using VaderSharp2; //used for the sentiment analysis
+using Fall2024_Assignment3_nrpucci1.Services;
+
 
 namespace Fall2024_Assignment3_nrpucci1.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly OpenAIClient _openAiClient;
+        private readonly AzureOpenAIClient _openAiClient;
         private readonly SentimentIntensityAnalyzer _sentimentAnalyzer;
+        private readonly AIService _aiService;
 
-        public MoviesController(ApplicationDbContext context)
+        public MoviesController(ApplicationDbContext context, AIService aiService)
         {
             _context = context;
 
             //OpenAI client (replace with actual endpoint and key from secrets)
             string endpoint = "https://your-openai-resource-name.openai.azure.com/";
             string apiKey = "Azure_OpenAI_Key";
-            _openAiClient = new OpenAIClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
+            _openAiClient = new AzureOpenAIClient(new Uri(endpoint), new ApiKeyCredential(apiKey));
+
 
             //sentiment analyzer initialization
             _sentimentAnalyzer = new SentimentIntensityAnalyzer();
@@ -37,36 +42,36 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             if (id == null) return NotFound();
 
             var movie = await _context.Movies
-                .Include(m => m.Actors) //include related actors if applicable
+                .Include(m => m.MovieActors)
+                    .ThenInclude(ma => ma.Actor)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null) return NotFound();
 
-            //generates ai reviews
-            var reviews = new List<(string Review, string Sentiment)>();
-            for (int i = 0; i < 10; i++)
-            {
-                var response = await _openAiClient.GetChatCompletionsAsync("gpt-35-turbo", new ChatCompletionsOptions
-                {
-                    Messages = new List<ChatMessage>
-                    {
-                        new ChatMessage("user", $"Write a review for the movie '{movie.Title}'.")
-                    }
-                });
+            // Generate AI reviews using the AIService
+            var reviewsWithScores = await _aiService.GenerateMovieReviewsAsync(
+                movie.Title,
+                movie.ReleaseYear.ToString(),
+                "Director Name" // Replace with actual director if available
+            );
 
-                var reviewText = response.Value.Choices.First().Message.Content;
+            // Convert sentiment scores to labels
+            var reviews = reviewsWithScores.Select(r => (
+                Review: r.Review,
+                Sentiment: r.SentimentScore > 0.05 ? "Positive" : r.SentimentScore < -0.05 ? "Negative" : "Neutral"
+            )).ToList();
 
-                //analyze the sentiment of given review
-                var sentimentScore = _sentimentAnalyzer.PolarityScores(reviewText).Compound;
-                var sentiment = sentimentScore > 0 ? "Positive" : "Negative";
+            // Calculate overall sentiment
+            int positiveCount = reviews.Count(r => r.Sentiment == "Positive");
+            int negativeCount = reviews.Count(r => r.Sentiment == "Negative");
 
-                reviews.Add((reviewText, sentiment));
-            }
+            string overallSentiment = "Neutral";
+            if (positiveCount > negativeCount)
+                overallSentiment = "Positive";
+            else if (negativeCount > positiveCount)
+                overallSentiment = "Negative";
 
-            //calculate the overall sentiment of the reviews
-            var overallSentiment = reviews.Count(r => r.Sentiment == "Positive") > 5 ? "Positive" : "Negative";
-
-            //prepare view model
+            // Prepare the view model
             var viewModel = new MovieDetailsViewModel
             {
                 Movie = movie,
@@ -76,7 +81,5 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
 
             return View(viewModel);
         }
-
-        
     }
 }

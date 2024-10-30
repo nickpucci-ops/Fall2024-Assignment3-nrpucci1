@@ -7,35 +7,29 @@
 <h1>@Model.Movie.Title</h1>
 
 <div>
-    <h4>Movie</h4>
+    <h4>Movie Details</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.ImdbLink)
+            Genre
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Movie.Genre
+        </dd>
+        <dt class="col-sm-2">
+            Release Year
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Movie.YearOfRelease
+        </dd>
+        <dt class="col-sm-2">
+            IMDB Link
         </dt>
         <dd class="col-sm-10">
             <a href="@Model.Movie.ImdbLink" target="_blank">@Model.Movie.ImdbLink</a>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.Genre)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.Genre)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.YearOfRelease)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.YearOfRelease)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.PosterURL)
+            Poster
         </dt>
         <dd class="col-sm-10">
             <img src="@Model.Movie.PosterURL" alt="Movie Poster" style="width:200px;" />
@@ -43,12 +37,12 @@
     </dl>
 </div>
 
-<!-- actors list -->
+<!-- Actors list -->
 <h2>Actors in this Movie</h2>
 <ul>
-    @foreach (var actor in Model.Movie.Actors)
+    @foreach (var ma in Model.Movie.MovieActors)
     {
-        <li>@actor.Name</li>
+        <li>@ma.Actor.Name</li>
     }
 </ul>
 
@@ -75,11 +69,19 @@
 </table>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Movie?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Movie.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
+    <!-- jQuery and DataTables scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7x1JgEw5qPqt8KKaKj4eEmt6x9zqau5K+Qv"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"
+            integrity="sha384-/X41i3nsPbT4skgQV9jR6T2TfAWlQ7p+ZzQOcTLJ6+QjywJbxsvS3uZjH4VxjvAy"
+            crossorigin="anonymous"></script>
+
     <script>
         $(document).ready(function () {
             $('.datatables').DataTable();

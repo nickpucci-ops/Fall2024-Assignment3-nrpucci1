@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Fall2024_Assignment3_nrpucci1.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Fall2024_Assignment3_nrpucci1.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+// For .NET 6 and later (Program.cs)
+builder.Services.AddSingleton<AIService>();
+
 
 var app = builder.Build();
 
