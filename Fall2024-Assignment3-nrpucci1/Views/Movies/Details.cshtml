@@ -1,48 +1,88 @@
-﻿@model Fall2024_Assignment3_nrpucci1.Models.Movie
+﻿@model Fall2024_Assignment3_nrpucci1.Models.MovieDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Model.Movie.Title</h1>
 
 <div>
     <h4>Movie</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImdbLink)
+            @Html.DisplayNameFor(model => model.Movie.ImdbLink)
         </dt>
         <dd class="col-sm-10">
-            <a href="@Model.ImdbLink" target="_blank">@Model.ImdbLink</a>
+            <a href="@Model.Movie.ImdbLink" target="_blank">@Model.Movie.ImdbLink</a>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
+            @Html.DisplayNameFor(model => model.Movie.Genre)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Genre)
+            @Html.DisplayFor(model => model.Movie.Genre)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Movie.Title)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Movie.Title)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.YearOfRelease)
+            @Html.DisplayNameFor(model => model.Movie.YearOfRelease)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.YearOfRelease)
+            @Html.DisplayFor(model => model.Movie.YearOfRelease)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PosterURL)
+            @Html.DisplayNameFor(model => model.Movie.PosterURL)
         </dt>
         <dd class="col-sm-10">
-            <img src="@Model.PosterURL" alt="Movie Poster" style="width:200px;" />
+            <img src="@Model.Movie.PosterURL" alt="Movie Poster" style="width:200px;" />
         </dd>
     </dl>
 </div>
+
+<!-- actors list -->
+<h2>Actors in this Movie</h2>
+<ul>
+    @foreach (var actor in Model.Movie.Actors)
+    {
+        <li>@actor.Name</li>
+    }
+</ul>
+
+<h2>Overall Sentiment: @Model.OverallSentiment</h2>
+
+<!-- AI reviews table -->
+<h2>AI-Generated Reviews</h2>
+<table class="table datatables">
+    <thead>
+        <tr>
+            <th>Review</th>
+            <th>Sentiment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model.Reviews)
+        {
+            <tr>
+                <td>@review.Review</td>
+                <td>@review.Sentiment</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Movie?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.datatables').DataTable();
+        });
+    </script>
+}
