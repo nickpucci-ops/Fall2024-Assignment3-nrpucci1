@@ -7,23 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_nrpucci1.Data;
 using Fall2024_Assignment3_nrpucci1.Models;
+using Fall2024_Assignment3_nrpucci1.Services;
 
 namespace Fall2024_Assignment3_nrpucci1.Controllers
 {
     public class ActorsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AIService _aiService;
 
-        public ActorsController(ApplicationDbContext context)
+        public ActorsController(ApplicationDbContext context, AIService aiService)
         {
             _context = context;
+            _aiService = aiService;
         }
 
-        // GET: Actors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Actors.ToListAsync());
+            var actors = await _context.Actors
+                .Include(a => a.Movies)
+                .ToListAsync();
+            return View(actors);
         }
+
 
         // GET: Actors/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -34,14 +40,48 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             }
 
             var actor = await _context.Actors
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(a => a.Movies)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
             if (actor == null)
             {
                 return NotFound();
             }
 
-            return View(actor);
+            // Prepare the view model
+            var viewModel = new ActorDetailsViewModel
+            {
+                Actor = actor,
+                // We will populate Tweets and OverallSentiment below
+            };
+
+            // Generate AI-generated tweets and perform sentiment analysis
+            var tweetsWithScores = await _aiService.GenerateActorTweetsAsync(actor.Name);
+
+            // Convert sentiment scores to labels
+            var tweets = tweetsWithScores.Select(t => (
+                Tweet: t.Tweet,
+                Sentiment: t.SentimentScore > 0.05 ? "Positive" :
+                           t.SentimentScore < -0.05 ? "Negative" : "Neutral"
+            )).ToList();
+
+            // Calculate overall sentiment
+            int positiveCount = tweets.Count(t => t.Sentiment == "Positive");
+            int negativeCount = tweets.Count(t => t.Sentiment == "Negative");
+
+            string overallSentiment = "Neutral";
+            if (positiveCount > negativeCount)
+                overallSentiment = "Positive";
+            else if (negativeCount > positiveCount)
+                overallSentiment = "Negative";
+
+            // Assign to the view model
+            viewModel.Tweets = tweets;
+            viewModel.OverallSentiment = overallSentiment;
+
+            return View(viewModel);
         }
+
 
         // GET: Actors/Create
         public IActionResult Create()

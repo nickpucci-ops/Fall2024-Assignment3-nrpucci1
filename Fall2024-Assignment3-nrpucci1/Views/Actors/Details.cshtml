@@ -1,50 +1,91 @@
-﻿@model Fall2024_Assignment3_nrpucci1.Models.Actor
+﻿@model Fall2024_Assignment3_nrpucci1.Models.ActorDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-<img src="@Model.PhotoURL" alt="Actor Photo" style="width:200px;" />
+<h1>@Model.Actor.Name</h1>
 
 <div>
-    <h4>Actor</h4>
+    <h4>Actor Details</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            Gender
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Model.Actor.Gender
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
+            Age
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
+            @Model.Actor.Age
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
+            IMDB Link
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Age)
+            <a href="@Model.Actor.ImdbLink" target="_blank">@Model.Actor.ImdbLink</a>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImdbLink)
+            Photo
         </dt>
         <dd class="col-sm-10">
-            <a href="@Model.ImdbLink" target="_blank">@Model.ImdbLink</a>
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhotoURL)
-        </dt>
-        <dd class="col-sm-10">
-            <img src="@Model.PhotoURL" alt="Actor Photo" style="width:200px;" />
+            <img src="@Model.Actor.PhotoURL" alt="Actor Photo" style="width:200px;" />
         </dd>
     </dl>
 </div>
+
+<!-- Movies list -->
+<h2>Movies with @Model.Actor.Name</h2>
+<ul>
+    @foreach (var movie in Model.Actor.Movies)
+    {
+            <li>@movie.Title</li>
+    }
+</ul>
+
+<!-- Overall Sentiment -->
+<h2>Overall Sentiment: @Model.OverallSentiment</h2>
+
+<!-- AI-generated tweets table -->
+<h2>AI-Generated Tweets</h2>
+<table class="table datatables">
+    <thead>
+        <tr>
+            <th>Tweet</th>
+            <th>Sentiment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tweet in Model.Tweets)
+        {
+                <tr>
+                    <td>@tweet.Tweet</td>
+                    <td>@tweet.Sentiment</td>
+                </tr>
+        }
+    </tbody>
+</table>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Actor.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+        <!-- Include jQuery and DataTables scripts with SRI hashes -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7x1JgEw5qPqt8KKaKj4eEmt6x9zqau5K+Qv"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"
+            integrity="sha384-/X41i3nsPbT4skgQV9jR6T2TfAWlQ7p+ZzQOcTLJ6+QjywJbxsvS3uZjH4VxjvAy"
+            crossorigin="anonymous"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('.datatables').DataTable();
+            });
+        </script>
+}

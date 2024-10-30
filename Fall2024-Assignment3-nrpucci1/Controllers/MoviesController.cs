@@ -42,8 +42,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             if (id == null) return NotFound();
 
             var movie = await _context.Movies
-                .Include(m => m.MovieActors)
-                    .ThenInclude(ma => ma.Actor)
+                .Include(m => m.Actors)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null) return NotFound();
@@ -51,7 +50,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             // Generate AI reviews using the AIService
             var reviewsWithScores = await _aiService.GenerateMovieReviewsAsync(
                 movie.Title,
-                movie.ReleaseYear.ToString(),
+                movie.YearOfRelease.ToString(),
                 "Director Name" // Replace with actual director if available
             );
 

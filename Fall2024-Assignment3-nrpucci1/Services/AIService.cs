@@ -9,6 +9,7 @@ using OpenAI.Chat;
 using VaderSharp2;
 using Microsoft.Extensions.Configuration;
 using System.ClientModel;
+using OpenAI;
 
 namespace Fall2024_Assignment3_nrpucci1.Services
 {
@@ -17,6 +18,7 @@ namespace Fall2024_Assignment3_nrpucci1.Services
         private readonly AzureOpenAIClient _client;
         private readonly SentimentIntensityAnalyzer _sentimentAnalyzer;
         private readonly string _aiDeployment;
+        private readonly bool _isApiConfigured; //for testing
 
         public AIService(IConfiguration configuration)
         {
@@ -25,9 +27,20 @@ namespace Fall2024_Assignment3_nrpucci1.Services
             string apiEndpoint = configuration["AzureOpenAI:Endpoint"];
             _aiDeployment = configuration["AzureOpenAI:DeploymentName"]; // e.g., "gpt-35-turbo"
 
-            var apiCredential = new ApiKeyCredential(apiKey);
-            _client = new AzureOpenAIClient(new Uri(apiEndpoint), apiCredential);
             _sentimentAnalyzer = new SentimentIntensityAnalyzer();
+
+            if (!string.IsNullOrEmpty(apiEndpoint) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(_aiDeployment))
+            {
+                _client = new AzureOpenAIClient(new Uri(apiEndpoint), new ApiKeyCredential(apiKey));
+                _isApiConfigured = true;
+            }
+            else
+            {
+                _isApiConfigured = false;
+            }
+
+            //var apiCredential = new ApiKeyCredential(apiKey);
+            //_client = new AzureOpenAIClient(new Uri(apiEndpoint), apiCredential);
         }
 
         public async Task<List<(string Review, double SentimentScore)>> GenerateMovieReviewsAsync(string movieTitle, string releaseYear, string director)
@@ -69,5 +82,35 @@ namespace Fall2024_Assignment3_nrpucci1.Services
 
             return reviews;
         }
+
+        public async Task<List<(string Tweet, double SentimentScore)>> GenerateActorTweetsAsync(string actorName)
+        {
+            var tweets = new List<(string Tweet, double SentimentScore)>();
+
+            // Get ChatClient
+            ChatClient chatClient = _client.GetChatClient(_aiDeployment);
+
+            var messages = new ChatMessage[]
+            {
+        new SystemChatMessage($"You represent the Twitter social media platform. Generate an answer with a valid JSON formatted array of objects containing the tweet and username. The response should start with [."),
+        new UserChatMessage($"Generate 20 tweets from a variety of users about the actor {actorName}.")
+            };
+
+            ClientResult<ChatCompletion> result = await chatClient.CompleteChatAsync(messages);
+
+            string tweetsJsonString = result.Value.Content.FirstOrDefault()?.Text ?? "[]";
+            JsonArray json = JsonNode.Parse(tweetsJsonString)!.AsArray();
+
+            foreach (var tweetNode in json)
+            {
+                var tweetText = tweetNode["tweet"]?.ToString() ?? "";
+                // Perform sentiment analysis
+                var sentimentScore = _sentimentAnalyzer.PolarityScores(tweetText).Compound;
+                tweets.Add((Tweet: tweetText, SentimentScore: sentimentScore));
+            }
+
+            return tweets;
+        }
+
     }
 }
