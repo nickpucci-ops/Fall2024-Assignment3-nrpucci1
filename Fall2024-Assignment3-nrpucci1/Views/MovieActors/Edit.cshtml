@@ -4,25 +4,32 @@
     ViewData["Title"] = "Edit Movie-Actor Association";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>Edit Association</h1>
 
 <form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
     <input type="hidden" asp-for="MovieActor.Id" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="form-group">
         <label asp-for="MovieActor.MovieId">Movie</label>
         <select asp-for="MovieActor.MovieId" class="form-control"
-                asp-items="@(new SelectList(Model.Movies, "Id", "Title", Model.MovieActor.MovieId))">
+                asp-items="Model.MovieSelectList">
         </select>
         <span asp-validation-for="MovieActor.MovieId" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="MovieActor.ActorId">Actor</label>
         <select asp-for="MovieActor.ActorId" class="form-control"
-                asp-items="@(new SelectList(Model.Actors, "Id", "Name", Model.MovieActor.ActorId))">
+                asp-items="Model.ActorSelectList">
         </select>
         <span asp-validation-for="MovieActor.ActorId" class="text-danger"></span>
     </div>
+
     <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </form>
 
 @section Scripts {

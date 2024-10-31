@@ -8,14 +8,16 @@ namespace Fall2024_Assignment3_nrpucci1.Models
         [Key]
         public int Id { get; set; }
 
-        // Foreign Key to Movie
-        [ForeignKey("Movie")]
+        [Required(ErrorMessage = "Please select a movie.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid movie.")]
         public int MovieId { get; set; }
+
         public Movie Movie { get; set; }
 
-        // Foreign Key to Actor
-        [ForeignKey("Actor")]
+        [Required(ErrorMessage = "Please select an actor.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid actor.")]
         public int ActorId { get; set; }
+
         public Actor Actor { get; set; }
     }
 }

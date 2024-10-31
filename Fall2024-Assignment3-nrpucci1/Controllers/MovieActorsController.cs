@@ -55,8 +55,8 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
         {
             var viewModel = new MovieActorViewModel
             {
-                Movies = _context.Movies.ToList(),
-                Actors = _context.Actors.ToList(),
+                Movies = _context.Movies.OrderBy(m => m.Title).ToList(), //ordering alphabetically
+                Actors = _context.Actors.OrderBy(m => m.Name).ToList(),
                 MovieActor = new MovieActor()
             };
             return View(viewModel);
@@ -82,13 +82,14 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             // Reload movies and actors lists if model state is invalid
-            viewModel.Movies = _context.Movies.ToList();
-            viewModel.Actors = _context.Actors.ToList();
+            viewModel.Movies = _context.Movies.OrderBy(m => m.Title).ToList();
+            viewModel.Actors = _context.Actors.OrderBy(a => a.Name).ToList(); 
             return View(viewModel);
         }
 
 
         // GET: MovieActor/Edit/5
+        // GET: MovieActors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -102,12 +103,30 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             }
             var viewModel = new MovieActorViewModel
             {
-                MovieActor = movieActor,
-                Movies = _context.Movies.ToList(),
-                Actors = _context.Actors.ToList()
+                MovieActor = movieActor
             };
+
+            // Populate SelectLists with default options
+            var movies = _context.Movies.OrderBy(m => m.Title).ToList();
+            movies.Insert(0, new Movie { Id = 0, Title = "Select Movie" });
+            viewModel.MovieSelectList = new SelectList(
+                _context.Movies.OrderBy(m => m.Title).ToList(),
+                "Id",
+                "Title",
+                movieActor.MovieId
+            );
+            var actors = _context.Actors.OrderBy(a => a.Name).ToList();
+            actors.Insert(0, new Actor { Id = 0, Name = "Select Actor" });
+            viewModel.ActorSelectList = new SelectList(
+                _context.Actors.OrderBy(a => a.Name).ToList(),
+                "Id",
+                "Name",
+                movieActor.ActorId
+            );
+
             return View(viewModel);
         }
+
 
 
         // POST: MovieActor/Edit/5
@@ -123,12 +142,10 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             }
             bool exists = _context.MovieActors
                 .Any(ma => ma.MovieId == viewModel.MovieActor.MovieId && ma.ActorId == viewModel.MovieActor.ActorId && ma.Id != id);
-
             if (exists)
             {
                 ModelState.AddModelError("", "This actor is already associated with the movie.");
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -149,11 +166,22 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            // Reload movies and actors lists if model state is invalid
-            viewModel.Movies = _context.Movies.ToList();
-            viewModel.Actors = _context.Actors.ToList();
+            // Reload SelectLists if model state is invalid
+            viewModel.MovieSelectList = new SelectList(
+                _context.Movies.OrderBy(m => m.Title).ToList(),
+                "Id",
+                "Title",
+                viewModel.MovieActor.MovieId
+            );
+            viewModel.ActorSelectList = new SelectList(
+                _context.Actors.OrderBy(a => a.Name).ToList(),
+                "Id",
+                "Name",
+                viewModel.MovieActor.ActorId
+            );
             return View(viewModel);
         }
+
 
 
         // GET: MovieActors/Delete/5
