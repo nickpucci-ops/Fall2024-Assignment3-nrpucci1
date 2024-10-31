@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Fall2024_Assignment3_nrpucci1.Models;
 
-namespace YourNamespace.Models
+namespace Fall2024_Assignment3_nrpucci1.Models
 {
     public class MovieActor
     {

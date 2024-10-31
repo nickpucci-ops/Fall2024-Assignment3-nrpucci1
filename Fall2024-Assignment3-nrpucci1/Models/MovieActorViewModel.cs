@@ -1,6 +1,5 @@
-﻿using Fall2024_Assignment3_nrpucci1.Models;
+﻿ namespace Fall2024_Assignment3_nrpucci1.Models
 
-namespace YourNamespace.Models
 {
     public class MovieActorViewModel
     {

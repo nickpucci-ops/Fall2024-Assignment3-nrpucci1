@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_nrpucci1.Data;
 using Fall2024_Assignment3_nrpucci1.Models;
 using Fall2024_Assignment3_nrpucci1.Services;
-using YourNamespace.Models;
 
 
 namespace Fall2024_Assignment3_nrpucci1.Controllers
