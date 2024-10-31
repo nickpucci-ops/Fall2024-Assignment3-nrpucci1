@@ -1,0 +1,30 @@
+﻿@model IEnumerable<YourNamespace.Models.MovieActor>
+
+<h1>Manage Movie-Actor Associations</h1>
+
+<p>
+    <a asp-action="Create">Create New Association</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Movie</th>
+            <th>Actor</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Movie.Title</td>
+                <td>@item.Actor.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

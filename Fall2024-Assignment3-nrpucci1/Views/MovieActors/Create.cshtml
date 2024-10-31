@@ -1,0 +1,31 @@
+﻿@model YourNamespace.Models.MovieActorViewModel
+
+@{
+    ViewData["Title"] = "Create Movie-Actor Association";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="MovieActor.MovieId">Movie</label>
+        <select asp-for="MovieActor.MovieId" class="form-control"
+                asp-items="@(new SelectList(Model.Movies, "Id", "Title"))">
+        </select>
+        <span asp-validation-for="MovieActor.MovieId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MovieActor.ActorId">Actor</label>
+        <select asp-for="MovieActor.ActorId" class="form-control"
+                asp-items="@(new SelectList(Model.Actors, "Id", "Name"))">
+        </select>
+        <span asp-validation-for="MovieActor.ActorId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

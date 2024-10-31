@@ -1,6 +1,7 @@
 ﻿using Fall2024_Assignment3_nrpucci1.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using YourNamespace.Models;
 
 namespace Fall2024_Assignment3_nrpucci1.Data
 {
@@ -12,5 +13,7 @@ namespace Fall2024_Assignment3_nrpucci1.Data
         }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Actor> Actors { get; set; }
+        public DbSet<MovieActor> MovieActors { get; set; }
+
     }
 }
