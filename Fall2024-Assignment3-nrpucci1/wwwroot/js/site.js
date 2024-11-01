@@ -1,10 +1,5 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener("DOMContentLoaded", function () {
+    $('.datatables').DataTable();
 
-// Write your JavaScript code.
-
-
-//set connection string
-builder.Services.AddDbContext < ApplicationDbContext > (options =>
-    options.UseSqlServer(connectionStringBuilder.ConnectionString));
-```
+    console.log("DataTables initialized.");
+});

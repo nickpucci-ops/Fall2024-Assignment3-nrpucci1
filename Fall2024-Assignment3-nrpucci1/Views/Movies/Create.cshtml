@@ -13,9 +13,9 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ImdbLink" class="control-label"></label>
-                <input asp-for="ImdbLink" class="form-control" />
-                <span asp-validation-for="ImdbLink" class="text-danger"></span>
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Genre" class="control-label"></label>
@@ -23,14 +23,14 @@
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="YearOfRelease" class="control-label"></label>
                 <input asp-for="YearOfRelease" class="form-control" />
                 <span asp-validation-for="YearOfRelease" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImdbLink" class="control-label"></label>
+                <input asp-for="ImdbLink" class="form-control" />
+                <span asp-validation-for="ImdbLink" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PosterURL" class="control-label"></label>

@@ -2,12 +2,18 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1>Welcome to my Movie and Actor Management Site</h1>
-<p>
-    This site allows you to manage movies and actors with AI-driven reviews and comments
+<h1 class="text-center">Movie and Actor Management Site</h1>
+<p class="text-center">
+    Welcome! This website allows you to manage movies and actors with AI-driven reviews and sentiments.
 </p>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-4">
+    <h2 class="display-5">Get Started</h2>
+    <p>Manage your movies, actors, and associations below:</p>
+
+    <div class="d-flex justify-content-center gap-3">
+        <a asp-controller="Movies" asp-action="Create" class="btn btn-primary btn-lg">Add New Movie</a>
+        <a asp-controller="Actors" asp-action="Create" class="btn btn-primary btn-lg">Add New Actor</a>
+        <a asp-controller="MovieActor" asp-action="Create" class="btn btn-primary btn-lg">Manage Associations</a>
+    </div>
 </div>
