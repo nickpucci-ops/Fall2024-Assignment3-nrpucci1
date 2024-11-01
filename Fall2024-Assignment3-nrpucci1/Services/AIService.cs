@@ -22,10 +22,9 @@ namespace Fall2024_Assignment3_nrpucci1.Services
 
         public AIService(IConfiguration configuration)
         {
-            // Retrieve API credentials from configuration or secrets manager
             string apiKey = configuration["AzureOpenAI:ApiKey"];
             string apiEndpoint = configuration["AzureOpenAI:Endpoint"];
-            _aiDeployment = configuration["AzureOpenAI:DeploymentName"]; // e.g., "gpt-35-turbo"
+            _aiDeployment = configuration["AzureOpenAI:DeploymentName"];
 
             _sentimentAnalyzer = new SentimentIntensityAnalyzer();
 
@@ -55,15 +54,15 @@ namespace Fall2024_Assignment3_nrpucci1.Services
                     ("An outstanding performance and a captivating story!", 0.85),
                     ("The movie was okay, but could have been better.", 0.0),
                     ("I didn't enjoy the film; it was quite disappointing.", -0.6),
-                        // Add more mock reviews if needed
                 };
                 return reviews;
             }
 
-            // Define personas
-            string[] personas = { "is harsh", "loves romance", "loves comedy", "loves thrillers", "loves fantasy" };
+            string[] personas = { "is harsh", "loves romance", "loves comedy", "loves thrillers",
+                "loves fantasy", "loves sci fi", "absolutely hates movies with every fiber in his body", 
+                "thinks Mr. Maclane is an awesome professor", "loves action but does not love fantasy or sci-fi", 
+                "is tough but also can't stop himself from saying 'Cowabunga!' every couple words" };
 
-            // Get ChatClient
             ChatClient chatClient = _client.GetChatClient(_aiDeployment);
 
             foreach (string persona in personas)
@@ -71,26 +70,24 @@ namespace Fall2024_Assignment3_nrpucci1.Services
                 var messages = new ChatMessage[]
                 {
                     new SystemChatMessage($"You are a film reviewer and film critic who {persona}."),
-                    new UserChatMessage($"How would you rate the movie {movieTitle} released in {releaseYear} directed by {director} out of 10 in less than 175 words?")
+                    new UserChatMessage($"How would you rate the movie {movieTitle} released in {releaseYear} out of 10 in less than 175 words?")
                 };
 
                 var chatCompletionOptions = new ChatCompletionOptions
                 {
-                    MaxOutputTokenCount = 200,
+                    MaxOutputTokenCount = 120, //buffer to stay within rate limit
                 };
 
                 ClientResult<ChatCompletion> result = await chatClient.CompleteChatAsync(messages, chatCompletionOptions);
 
                 string reviewText = result.Value.Content[0].Text;
 
-                // Perform sentiment analysis
                 SentimentAnalysisResults sentiment = _sentimentAnalyzer.PolarityScores(reviewText);
                 double sentimentScore = sentiment.Compound;
 
                 reviews.Add((reviewText, sentimentScore));
 
-                // Throttle requests to comply with rate limits
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Task.Delay(500); //0.5second delay stays within rate limit
             }
 
             return reviews;
@@ -111,7 +108,6 @@ namespace Fall2024_Assignment3_nrpucci1.Services
                 return tweets;
             }
 
-            // Get ChatClient
             ChatClient chatClient = _client.GetChatClient(_aiDeployment);
 
             var messages = new ChatMessage[]
@@ -128,7 +124,6 @@ namespace Fall2024_Assignment3_nrpucci1.Services
             foreach (var tweetNode in json)
             {
                 var tweetText = tweetNode["tweet"]?.ToString() ?? "";
-                // Perform sentiment analysis
                 var sentimentScore = _sentimentAnalyzer.PolarityScores(tweetText).Compound;
                 tweets.Add((Tweet: tweetText, SentimentScore: sentimentScore));
             }
