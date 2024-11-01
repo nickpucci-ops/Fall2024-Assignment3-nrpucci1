@@ -39,6 +39,12 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
 
             if (movie == null) return NotFound();
 
+            var actors = await _context.MovieActor
+                .Include(ma => ma.Actor)
+                .Where(ma => ma.MovieId == movie.Id)
+                .Select(ma => ma.Actor)
+                .ToListAsync();
+
             //generate ai reviews
             var reviewsWithScores = await _aiService.GenerateMovieReviewsAsync(
                 movie.Title,
@@ -62,7 +68,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             else if (negativeCount > positiveCount)
                 overallSentiment = "Negative";
 
-            var viewModel = new MovieDetailsViewModel(movie);
+            var viewModel = new MovieDetailsViewModel(movie, actors);
             viewModel.OverallSentiment = overallSentiment;
             viewModel.Reviews = reviews;
 

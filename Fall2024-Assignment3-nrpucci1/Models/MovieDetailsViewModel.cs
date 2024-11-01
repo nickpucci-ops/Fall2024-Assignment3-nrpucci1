@@ -6,8 +6,9 @@ public class MovieDetailsViewModel
     public IEnumerable<Actor>? Actors { get; set; }
     public string OverallSentiment { get; set; } = string.Empty;
     public List<(string Review, string Sentiment)>? Reviews { get; set; } = new List<(string, string)>();
-    public MovieDetailsViewModel(Movie movie)
+    public MovieDetailsViewModel(Movie movie, IEnumerable<Actor> actors)
     {
         Movie = movie;
+        Actors = actors;
     }    
 }
