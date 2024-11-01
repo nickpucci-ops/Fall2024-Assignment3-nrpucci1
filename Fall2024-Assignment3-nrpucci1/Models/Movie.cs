@@ -5,15 +5,12 @@ public class Movie
 {
     [Key]
     public int Id { get; set; } //primary key
-
-    public string ImdbLink { get; set; } = string.Empty;
-    public string Genre { get; set; } = string.Empty;
     [Required]
-    public string Title { get; set; } = string.Empty;
-    public string YearOfRelease { get; set; } = string.Empty;
-    public string PosterURL { get; set; } = string.Empty;
+    public string Title { get; set; }
+    public string? ImdbLink { get; set; }
+    public string? Genre { get; set; }
+    public string? YearOfRelease { get; set; }
+    public string? PosterURL { get; set; }
 
-    public ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
-
-
+    //public ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
 }

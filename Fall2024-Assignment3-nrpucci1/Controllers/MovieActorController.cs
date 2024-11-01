@@ -66,7 +66,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             Console.WriteLine($"MovieId: {movieActor.MovieId}, ActorId: {movieActor.ActorId}");
 
             bool alreadyExists = await _context.MovieActor
-                .AnyAsync(cs => cs.MovieId == movieActor.MovieId && cs.ActorId == movieActor.ActorId);
+                .AnyAsync(ma => ma.MovieId == movieActor.MovieId && ma.ActorId == movieActor.ActorId);
             if (ModelState.IsValid && !alreadyExists)
             {
                 _context.Add(movieActor);
@@ -145,7 +145,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             var movieActor = await _context.MovieActor
                 .Include(m => m.Actor)
                 .Include(m => m.Movie)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (movieActor == null)
             {
                 return NotFound();
