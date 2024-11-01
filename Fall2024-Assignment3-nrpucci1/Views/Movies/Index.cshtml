@@ -33,12 +33,6 @@
                 <td>
                     <img src="@item.PosterURL" alt="Movie Poster" style="width:50px; height:auto;" />
                 </td>
-                @*<td>
-                    @foreach (var item2 in access actors somehow)
-                    {
-                    <span>@item2.Name</span>
-                    }
-                </td>*@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
