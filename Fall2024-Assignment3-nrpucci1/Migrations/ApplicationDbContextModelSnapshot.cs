@@ -51,7 +51,7 @@ namespace Fall2024_Assignment3_nrpucci1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors");
+                    b.ToTable("Actor");
                 });
 
             modelBuilder.Entity("Fall2024_Assignment3_nrpucci1.Models.Movie", b =>
@@ -84,7 +84,7 @@ namespace Fall2024_Assignment3_nrpucci1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movie");
                 });
 
             modelBuilder.Entity("Fall2024_Assignment3_nrpucci1.Models.MovieActor", b =>
@@ -315,13 +315,13 @@ namespace Fall2024_Assignment3_nrpucci1.Migrations
             modelBuilder.Entity("Fall2024_Assignment3_nrpucci1.Models.MovieActor", b =>
                 {
                     b.HasOne("Fall2024_Assignment3_nrpucci1.Models.Actor", "Actor")
-                        .WithMany()
+                        .WithMany("MovieActor")
                         .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Fall2024_Assignment3_nrpucci1.Models.Movie", "Movie")
-                        .WithMany()
+                        .WithMany("MovieActor")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -380,6 +380,16 @@ namespace Fall2024_Assignment3_nrpucci1.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Fall2024_Assignment3_nrpucci1.Models.Actor", b =>
+                {
+                    b.Navigation("MovieActor");
+                });
+
+            modelBuilder.Entity("Fall2024_Assignment3_nrpucci1.Models.Movie", b =>
+                {
+                    b.Navigation("MovieActor");
                 });
 #pragma warning restore 612, 618
         }
