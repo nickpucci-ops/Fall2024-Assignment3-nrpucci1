@@ -116,8 +116,8 @@ namespace Fall2024_Assignment3_nrpucci1.Services
 
             var messages = new ChatMessage[]
             {
-        new SystemChatMessage($"You represent the Twitter social media platform. Generate an answer with a valid JSON formatted array of objects containing the tweet and username. The response should start with [."),
-        new UserChatMessage($"Generate 20 tweets from a variety of users about the actor {actorName}.")
+                new SystemChatMessage($"You represent the Twitter social media platform. Generate an answer with a valid JSON formatted array of objects containing the tweet and username. The response should start with [."),
+                new UserChatMessage($"Generate 20 tweets from a variety of users about the actor {actorName}.")
             };
 
             ClientResult<ChatCompletion> result = await chatClient.CompleteChatAsync(messages);

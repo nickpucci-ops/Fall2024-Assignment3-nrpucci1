@@ -9,7 +9,8 @@ public class Movie
     public string Title { get; set; }
     public string? ImdbLink { get; set; }
     public string? Genre { get; set; }
-    public string? YearOfRelease { get; set; }
+    [Required]
+    public string YearOfRelease { get; set; }
     public string? PosterURL { get; set; }
 
     //public ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
