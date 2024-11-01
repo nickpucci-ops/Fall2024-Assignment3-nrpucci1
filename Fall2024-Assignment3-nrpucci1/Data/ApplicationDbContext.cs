@@ -11,8 +11,8 @@ namespace Fall2024_Assignment3_nrpucci1.Data
         {
         }
 
-        public DbSet<Movie> Movies { get; set; } = default!;
-        public DbSet<Actor> Actors { get; set; } = default!;
+        public DbSet<Movie> Movie { get; set; } = default!;
+        public DbSet<Actor> Actor { get; set; } = default!;
 
         public DbSet<MovieActor> MovieActor { get; set; } = default!;  
     }

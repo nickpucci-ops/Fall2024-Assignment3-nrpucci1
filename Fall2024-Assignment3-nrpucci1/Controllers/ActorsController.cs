@@ -24,7 +24,7 @@
 
             public async Task<IActionResult> Index()
             {
-                return View(await _context.Actors.ToListAsync());
+                return View(await _context.Actor.ToListAsync());
             }
 
 
@@ -37,7 +37,7 @@
                     return NotFound();
                 }
 
-                var actor = await _context.Actors
+                var actor = await _context.Actor
                     .FirstOrDefaultAsync(m => m.Id == id);
 
                 var movies = await _context.MovieActor
@@ -114,7 +114,7 @@
                     return NotFound();
                 }
 
-                var actor = await _context.Actors.FindAsync(id);
+                var actor = await _context.Actor.FindAsync(id);
                 if (actor == null)
                 {
                     return NotFound();
@@ -165,7 +165,7 @@
                     return NotFound();
                 }
 
-                var actor = await _context.Actors
+                var actor = await _context.Actor
                     .FirstOrDefaultAsync(m => m.Id == id);
                 if (actor == null)
                 {
@@ -180,10 +180,10 @@
             [ValidateAntiForgeryToken]
             public async Task<IActionResult> DeleteConfirmed(int id)
             {
-                var actor = await _context.Actors.FindAsync(id);
+                var actor = await _context.Actor.FindAsync(id);
                 if (actor != null)
                 {
-                    _context.Actors.Remove(actor);
+                    _context.Actor.Remove(actor);
                 }
 
                 await _context.SaveChangesAsync();
@@ -192,7 +192,7 @@
 
             private bool ActorExists(int id)
             {
-                return _context.Actors.Any(e => e.Id == id);
+                return _context.Actor.Any(e => e.Id == id);
             }
         }
     }

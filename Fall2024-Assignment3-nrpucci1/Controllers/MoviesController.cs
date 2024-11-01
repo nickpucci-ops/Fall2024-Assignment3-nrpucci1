@@ -25,7 +25,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
         // **GET: Movies**
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movies.ToListAsync());
+            return View(await _context.Movie.ToListAsync());
         }
 
 
@@ -34,7 +34,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
         {
             if (id == null) return NotFound();
 
-            var movie = await _context.Movies
+            var movie = await _context.Movie
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null) return NotFound();
@@ -94,7 +94,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
         {
             if (id == null) return NotFound();
 
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _context.Movie.FindAsync(id);
             if (movie == null) return NotFound();
 
             return View(movie);
@@ -129,7 +129,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
         {
             if (id == null) return NotFound();
 
-            var movie = await _context.Movies
+            var movie = await _context.Movie
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null) return NotFound();
 
@@ -141,8 +141,8 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null) _context.Movies.Remove(movie);
+            var movie = await _context.Movie.FindAsync(id);
+            if (movie != null) _context.Movie.Remove(movie);
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -150,7 +150,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
 
         private bool MovieExists(int id)
         {
-            return _context.Movies.Any(e => e.Id == id);
+            return _context.Movie.Any(e => e.Id == id);
         }
     }
 }

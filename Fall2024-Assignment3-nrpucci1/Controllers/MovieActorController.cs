@@ -49,8 +49,8 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
         // GET: MovieActors/Create
         public IActionResult Create()
         {
-            ViewData["ActorId"] = new SelectList(_context.Actors, "Id", "Name");
-            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title");
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name");
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title");
             return View();
         }
 
@@ -74,8 +74,8 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ModelState.AddModelError("", "Movie/Actor relationship already exists");
-            ViewData["ActorId"] = new SelectList(_context.Actors, "Id", "Name", movieActor.ActorId);
-            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", movieActor.MovieId);
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name", movieActor.ActorId);
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title", movieActor.MovieId);
             return View(movieActor);
         }
 
@@ -92,8 +92,8 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             {
                 return NotFound();
             }
-            ViewData["ActorId"] = new SelectList(_context.Actors, "Id", "Name", movieActor.ActorId);
-            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", movieActor.MovieId);
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name", movieActor.ActorId);
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title", movieActor.MovieId);
             return View(movieActor);
         }
 
@@ -129,8 +129,8 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActorId"] = new SelectList(_context.Actors, "Id", "Name", movieActor.ActorId);
-            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", movieActor.MovieId);
+            ViewData["ActorId"] = new SelectList(_context.Actor, "Id", "Name", movieActor.ActorId);
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title", movieActor.MovieId);
             return View(movieActor);
         }
 
