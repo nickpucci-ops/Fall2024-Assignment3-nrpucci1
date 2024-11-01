@@ -34,9 +34,9 @@
                     <img src="@item.PosterURL" alt="Movie Poster" style="width:50px; height:auto;" />
                 </td>
                 <td>
-                    @foreach (var movieActor in item.MovieActors)
+                    @foreach (var movieActor in Model.MovieActors)
                     {
-                        <span>@movieActor.Actor.Name<br /></span>
+                        <p>@movieActor.Actor.Name</p>
                     }
                 </td>
                 <td>

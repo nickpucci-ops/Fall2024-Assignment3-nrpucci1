@@ -40,9 +40,9 @@
 <!-- Actors list -->
 <h2>Actors in this Movie</h2>
 <ul>
-    @foreach (var actor in Model.Movie.Actors)
+    @foreach (var movieActor in Model.MovieActors)
     {
-        <li>@actor.Name</li>
+        <p>@movieActor.Actor.Name</p>
     }
 </ul>
 
