@@ -38,9 +38,9 @@
                 </td>
                 <!-- New Movies Column -->
                 <td>
-                    @foreach (var movie in item.Movies)
+                    @foreach (var movieActor in item.MovieActors)
                     {
-                        <span>@movie.Title<br /></span>
+                        <span>@movieActor.Movie.Title<br /></span>
                     }
                 </td>
                 <!-- Action Links -->

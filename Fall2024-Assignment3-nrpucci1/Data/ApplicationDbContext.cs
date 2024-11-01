@@ -10,9 +10,9 @@ namespace Fall2024_Assignment3_nrpucci1.Data
             : base(options)
         {
         }
+
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Actor> Actors { get; set; }
         public DbSet<MovieActor> MovieActors { get; set; }
-
     }
 }

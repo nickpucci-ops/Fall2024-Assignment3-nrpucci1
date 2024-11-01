@@ -34,6 +34,12 @@
                     <img src="@item.PosterURL" alt="Movie Poster" style="width:50px; height:auto;" />
                 </td>
                 <td>
+                    @foreach (var movieActor in item.MovieActors)
+                    {
+                        <span>@movieActor.Actor.Name<br /></span>
+                    }
+                </td>
+                <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
