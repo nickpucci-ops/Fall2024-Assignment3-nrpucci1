@@ -54,19 +54,22 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             return View();
         }
 
-        // POST: MovieActors/Create
+        // POST: MovieActors/Create 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,MovieId,ActorId")] MovieActor movieActor)
         {
-            if (ModelState.IsValid)
+            bool alreadyExists = await _context.MovieActor
+                .AnyAsync(cs => cs.MovieId == movieActor.MovieId && cs.ActorId == movieActor.Actor.Id);
+            if (ModelState.IsValid && !alreadyExists)
             {
                 _context.Add(movieActor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ModelState.AddModelError("", "Movie/Actor relationship already exists");
             ViewData["ActorId"] = new SelectList(_context.Actors, "Id", "Name", movieActor.ActorId);
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", movieActor.MovieId);
             return View(movieActor);
