@@ -37,7 +37,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Actor)
+        @foreach (var item in Model.Actors!)
         {
             <tr>
                 <td>@item.Name</td>
@@ -63,7 +63,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var review in Model.Reviews)
+        @foreach (var review in Model.Reviews!)
         {
             <tr>
                 <td>@review.Review</td>
