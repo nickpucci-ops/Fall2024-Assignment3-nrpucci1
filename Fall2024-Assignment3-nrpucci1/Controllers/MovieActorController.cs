@@ -61,6 +61,10 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,MovieId,ActorId")] MovieActor movieActor)
         {
+
+            //For debugging
+            Console.WriteLine($"MovieId: {movieActor.MovieId}, ActorId: {movieActor.ActorId}");
+
             bool alreadyExists = await _context.MovieActor
                 .AnyAsync(cs => cs.MovieId == movieActor.MovieId && cs.ActorId == movieActor.ActorId);
             if (ModelState.IsValid && !alreadyExists)
