@@ -37,14 +37,12 @@
                     <img src="@item.PhotoURL" alt="Actor Photo" style="width:50px;" />
                 </td>
                 <!-- New Movies Column -->
-                <td>
-                    @*
-                    foreach (var movieActor in actor.MovieActors)
+                @* <td>
+                    foreach (var movieActor in actor.MovieActor)
                     {
                     <span>@movieActor.Movie.Title</span>
                     }
-                    *@
-                </td>
+                </td> *@
                 <!-- Action Links -->
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

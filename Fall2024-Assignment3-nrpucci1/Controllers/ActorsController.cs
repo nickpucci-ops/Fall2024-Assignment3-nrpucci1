@@ -25,12 +25,6 @@
             public async Task<IActionResult> Index()
             {
                 return View(await _context.Actors.ToListAsync());
-
-                //var actors = await _context.Actors
-                //    .Include(a => a.MovieActors)
-                //        .ThenInclude(ma => ma.Movie)
-                //    .ToListAsync();
-                //return View(actors);
             }
 
 
@@ -46,27 +40,20 @@
                 var actor = await _context.Actors
                     .FirstOrDefaultAsync(m => m.Id == id);
 
-            // Temporarily comment out the MovieActors dependency
-            // var movies = await _context.MovieActors
-            //     .Include(cs => cs.Movie)
-            //     .Where(cs => cs.ActorId == actor.Id)
-            //     .Select(cs => cs.Movie)
-            //     .ToListAsync();
+                var movies = await _context.MovieActor
+                    .Include(cs => cs.Movie)
+                    .Where(cs => cs.ActorId == actor.Id)
+                    .Select(cs => cs.Movie)
+                    .ToListAsync();
 
-            // Use an empty list as a placeholder for movies
-                var movies = new List<Movie>();
 
-            //var actor = await _context.Actors
-            //    .Include(a => a.Movies)
-            //    .FirstOrDefaultAsync(a => a.Id == id);
-
-            if (actor == null) return NotFound();
+                if (actor == null) return NotFound();
 
                 // Prepare the view model
                 var viewModel = new ActorDetailsViewModel(actor, movies);
                 //{
                 //    Actor = actor,
-                //    // We will populate Tweets and OverallSentiment below
+                //    //populate tweets and overallSentiment below
                 //};
 
                 // Generate AI-generated tweets and perform sentiment analysis

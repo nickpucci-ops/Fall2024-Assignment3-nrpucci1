@@ -4,55 +4,57 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>@Model.Actor.Name</h1>
+<h1>Details for @Model.Actor.Name</h1>
 
 <div>
     <h4>Actor Details</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            Gender
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Actor.Gender
-        </dd>
-        <dt class="col-sm-2">
-            Age
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Actor.Age
-        </dd>
-        <dt class="col-sm-2">
-            IMDB Link
-        </dt>
+        <dt class="col-sm-2">Gender</dt>
+        <dd class="col-sm-10">@Model.Actor.Gender</dd>
+
+        <dt class="col-sm-2">Age</dt>
+        <dd class="col-sm-10">@Model.Actor.Age</dd>
+
+        <dt class="col-sm-2">IMDB Link</dt>
         <dd class="col-sm-10">
             <a href="@Model.Actor.ImdbLink" target="_blank">@Model.Actor.ImdbLink</a>
         </dd>
-        <dt class="col-sm-2">
-            Photo
-        </dt>
+
+        <dt class="col-sm-2">Photo</dt>
         <dd class="col-sm-10">
             <img src="@Model.Actor.PhotoURL" alt="Actor Photo" style="width:200px;" />
         </dd>
     </dl>
 </div>
 
-<!-- Movies list -->
-<h2>Movies with @Model.Actor.Name</h2>
-@* 
-@foreach (var movieActor in Model.MovieActors)
-{
-    <p>@movieActor.Movie.Title</p>
-}
-*@
+<h5>Movies featuring @Model.Actor.Name</h5>
+<table class="table datatables">
+    <thead>
+        <tr>
+            <th>Movie Title</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Movies)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>
+                    <a asp-action="Details" asp-controller="Movies" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Edit" asp-controller="Movies" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Delete" asp-controller="Movies" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-<p>No movies available for this actor at the moment.</p>
-
-<!-- Overall Sentiment -->
-<h2>Overall Sentiment: @Model.OverallSentiment</h2>
+<h5>Overall Sentiment: @Model.OverallSentiment</h5>
 
 <!-- AI-generated tweets table -->
-<h2>AI-Generated Tweets</h2>
+<h5>AI-Generated Tweets</h5>
 <table class="table datatables">
     <thead>
         <tr>
@@ -63,10 +65,10 @@
     <tbody>
         @foreach (var tweet in Model.Tweets)
         {
-                <tr>
-                    <td>@tweet.Tweet</td>
-                    <td>@tweet.Sentiment</td>
-                </tr>
+            <tr>
+                <td>@tweet.Tweet</td>
+                <td>@tweet.Sentiment</td>
+            </tr>
         }
     </tbody>
 </table>
@@ -77,17 +79,17 @@
 </div>
 
 @section Scripts {
-        <!-- Include jQuery and DataTables scripts with SRI hashes -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    <!-- Include jQuery and DataTables scripts with SRI hashes -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7x1JgEw5qPqt8KKaKj4eEmt6x9zqau5K+Qv"
             crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"
             integrity="sha384-/X41i3nsPbT4skgQV9jR6T2TfAWlQ7p+ZzQOcTLJ6+QjywJbxsvS3uZjH4VxjvAy"
             crossorigin="anonymous"></script>
 
-        <script>
-            $(document).ready(function () {
-                $('.datatables').DataTable();
-            });
-        </script>
+    <script>
+        $(document).ready(function () {
+            $('.datatables').DataTable();
+        });
+    </script>
 }

@@ -10,11 +10,11 @@ using Fall2024_Assignment3_nrpucci1.Models;
 
 namespace Fall2024_Assignment3_nrpucci1.Controllers
 {
-    public class MovieActorsController : Controller
+    public class MovieActorController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public MovieActorsController(ApplicationDbContext context)
+        public MovieActorController(ApplicationDbContext context)
         {
             _context = context;
         }

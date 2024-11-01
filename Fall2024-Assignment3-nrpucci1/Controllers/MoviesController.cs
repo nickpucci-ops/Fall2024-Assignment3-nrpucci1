@@ -65,11 +65,6 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             var viewModel = new MovieDetailsViewModel(movie);
             viewModel.OverallSentiment = overallSentiment;
             viewModel.Reviews = reviews;
-            //{
-            //    Movie = movie,
-            //    Reviews = reviews,
-            //    OverallSentiment = overallSentiment
-            //};
 
             return View(viewModel);
         }
