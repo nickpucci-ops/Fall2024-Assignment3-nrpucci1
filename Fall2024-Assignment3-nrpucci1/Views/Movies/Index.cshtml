@@ -34,10 +34,13 @@
                     <img src="@item.PosterURL" alt="Movie Poster" style="width:50px; height:auto;" />
                 </td>
                 <td>
-                    @foreach (var movieActor in Model.MovieActors)
+                    <!-- Comment out any MovieActors references -->
+                    @*
+                    @foreach (var movieActor in movie.MovieActors)
                     {
-                        <p>@movieActor.Actor.Name</p>
+                    <span>@movieActor.Actor.Name</span>
                     }
+                    *@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -46,17 +46,21 @@
                 var actor = await _context.Actors
                     .FirstOrDefaultAsync(m => m.Id == id);
 
-                var movies = await _context.MovieActors
-                    .Include(cs => cs.Movie)
-                    .Where(cs => cs.ActorId == actor.Id)
-                    .Select(cs => cs.Movie)
-                    .ToListAsync();
-                
-                //var actor = await _context.Actors
-                //    .Include(a => a.Movies)
-                //    .FirstOrDefaultAsync(a => a.Id == id);
+            // Temporarily comment out the MovieActors dependency
+            // var movies = await _context.MovieActors
+            //     .Include(cs => cs.Movie)
+            //     .Where(cs => cs.ActorId == actor.Id)
+            //     .Select(cs => cs.Movie)
+            //     .ToListAsync();
 
-                if (actor == null) return NotFound();
+            // Use an empty list as a placeholder for movies
+                var movies = new List<Movie>();
+
+            //var actor = await _context.Actors
+            //    .Include(a => a.Movies)
+            //    .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (actor == null) return NotFound();
 
                 // Prepare the view model
                 var viewModel = new ActorDetailsViewModel(actor, movies);

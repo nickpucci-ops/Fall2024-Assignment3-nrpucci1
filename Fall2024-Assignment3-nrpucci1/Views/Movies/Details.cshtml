@@ -40,10 +40,14 @@
 <!-- Actors list -->
 <h2>Actors in this Movie</h2>
 <ul>
+    @*
     @foreach (var movieActor in Model.MovieActors)
     {
-        <p>@movieActor.Actor.Name</p>
+    <p>@movieActor.Actor.Name</p>
     }
+    *@
+    <p>No actors available for this movie at the moment.</p>
+
 </ul>
 
 <h2>Overall Sentiment: @Model.OverallSentiment</h2>
