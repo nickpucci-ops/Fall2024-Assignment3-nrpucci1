@@ -40,7 +40,7 @@ namespace Fall2024_Assignment3_nrpucci1.Services
             }
         }
 
-        public async Task<List<(string Review, double SentimentScore)>> GenerateMovieReviewsAsync(string movieTitle, string releaseYear, string director)
+        public async Task<List<(string Review, double SentimentScore)>> GenerateMovieReviewsAsync(string movieTitle, string releaseYear)
         {
             var reviews = new List<(string Review, double SentimentScore)>();
 

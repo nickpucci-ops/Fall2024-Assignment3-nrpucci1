@@ -48,8 +48,7 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             //generate ai reviews
             var reviewsWithScores = await _aiService.GenerateMovieReviewsAsync(
                 movie.Title,
-                movie.YearOfRelease,
-                "Director Name" //replace with actual director if available
+                movie.YearOfRelease
             );
 
             // sentiment scores to labels
