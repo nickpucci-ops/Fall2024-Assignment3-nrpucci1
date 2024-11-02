@@ -22,24 +22,22 @@ namespace Fall2024_Assignment3_nrpucci1.Services
 
         public AIService(IConfiguration configuration)
         {
-            string apiKey = configuration["AzureOpenAI:ApiKey"];
-            string apiEndpoint = configuration["AzureOpenAI:Endpoint"];
-            _aiDeployment = configuration["AzureOpenAI:DeploymentName"];
+            string apiKey = configuration["AzureOpenAI:ApiKeySecret"];
+            string apiEndpoint = configuration["AzureOpenAI:EndpointSecret"];
+            _aiDeployment = configuration["AzureOpenAI:DeploymentNameSecret"];
 
             _sentimentAnalyzer = new SentimentIntensityAnalyzer();
 
             if (!string.IsNullOrEmpty(apiEndpoint) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(_aiDeployment))
             {
-                _client = new AzureOpenAIClient(new Uri(apiEndpoint), new ApiKeyCredential(apiKey));
+                var apiCredential = new ApiKeyCredential(apiKey);
+                _client = new AzureOpenAIClient(new Uri(apiEndpoint), apiCredential);
                 _isApiConfigured = true;
             }
             else
             {
                 _isApiConfigured = false;
             }
-
-            //var apiCredential = new ApiKeyCredential(apiKey);
-            //_client = new AzureOpenAIClient(new Uri(apiEndpoint), apiCredential);
         }
 
         public async Task<List<(string Review, double SentimentScore)>> GenerateMovieReviewsAsync(string movieTitle, string releaseYear, string director)
