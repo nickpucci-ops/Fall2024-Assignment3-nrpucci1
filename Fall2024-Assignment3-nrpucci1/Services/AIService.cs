@@ -23,9 +23,13 @@ namespace Fall2024_Assignment3_nrpucci1.Services
         public AIService(IConfiguration configuration)
         {
             //check for environment variables first
-            string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY") ?? configuration["AzureOpenAI:ApiKey"];
-            string apiEndpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT") ?? configuration["AzureOpenAI:Endpoint"];
-            _aiDeployment = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? configuration["AzureOpenAI:DeploymentName"];
+            string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY") ?? configuration["AzureOpenAI:ApiKeySecret"];
+            string apiEndpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT") ?? configuration["AzureOpenAI:EndpointSecret"];
+            _aiDeployment = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? configuration["AzureOpenAI:DeploymentNameSecret"];
+
+            //string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
+            //string apiEndpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");
+            //_aiDeployment = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME");
 
 
             _sentimentAnalyzer = new SentimentIntensityAnalyzer();
@@ -33,7 +37,7 @@ namespace Fall2024_Assignment3_nrpucci1.Services
             if (!string.IsNullOrEmpty(apiEndpoint) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(_aiDeployment))
             {
                 var apiCredential = new ApiKeyCredential(apiKey);
-                _client = new AzureOpenAIClient(new Uri(apiEndpoint), apiCredential);
+                _client = new AzureOpenAIClient(new Uri(apiEndpoint), apiCredential);   
                 _isApiConfigured = true;
             }
             else

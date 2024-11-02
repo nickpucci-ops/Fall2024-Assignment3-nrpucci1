@@ -49,25 +49,30 @@
 
                 if (actor == null) return NotFound();
 
-                // Prepare the view model
                 var viewModel = new ActorDetailsViewModel(actor, movies);
-                //{
-                //    Actor = actor,
-                //    //populate tweets and overallSentiment below
-                //};
 
-                // Generate AI-generated tweets and perform sentiment analysis
+                //generate tweets and perform sentiment analysis
                 var tweetsWithScores = await _aiService.GenerateActorTweetsAsync(actor.Name);
 
-                // Convert sentiment scores to labels
+                //var tweets = tweetsWithScores.Select(t => (
+                //    Tweet: t.Tweet,
+                //    Sentiment: t.SentimentScore > 0.05 ? "Positive" :
+                //               t.SentimentScore < -0.05 ? "Negative" : "Neutral"
+                //)).ToList();
+
                 var tweets = tweetsWithScores.Select(t => (
-                    Tweet: t.Tweet,
-                    Sentiment: t.SentimentScore > 0.05 ? "Positive" :
-                               t.SentimentScore < -0.05 ? "Negative" : "Neutral"
+                    t.Tweet,
+                    Sentiment:
+                    t.SentimentScore >= 0.75 ? "Very Positive"
+                    : t.SentimentScore < 0.75 && t.SentimentScore >= 0.25 ? "Positive"
+                    : t.SentimentScore < 0.25 && t.SentimentScore >= -0.25 ? "Neutral"
+                    : t.SentimentScore < -0.25 && t.SentimentScore >= -0.75 ? "Negative"
+                    : t.SentimentScore < -0.75 ? "Very Negative"
+                    : "Neutral"
                 )).ToList();
 
-                // Calculate overall sentiment
-                int positiveCount = tweets.Count(t => t.Sentiment == "Positive");
+            //overall sentiment
+            int positiveCount = tweets.Count(t => t.Sentiment == "Positive");
                 int negativeCount = tweets.Count(t => t.Sentiment == "Negative");
 
                 string overallSentiment = "Neutral";
@@ -76,7 +81,6 @@
                 else if (negativeCount > positiveCount)
                     overallSentiment = "Negative";
 
-                // Assign to the view model
                 viewModel.Tweets = tweets;
                 viewModel.OverallSentiment = overallSentiment;
 

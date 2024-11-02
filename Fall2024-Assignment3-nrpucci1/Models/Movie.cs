@@ -13,5 +13,4 @@ public class Movie
     public string YearOfRelease { get; set; }
     public string? PosterURL { get; set; }
 
-    //public ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
 }

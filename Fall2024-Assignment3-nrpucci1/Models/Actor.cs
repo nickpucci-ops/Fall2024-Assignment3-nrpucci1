@@ -13,8 +13,5 @@ public class Actor
     public string? ImdbLink { get; set; }
     public string? PhotoURL   { get; set; }
 
-    //public ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
-
-
 }
 
