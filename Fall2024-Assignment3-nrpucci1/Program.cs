@@ -10,7 +10,7 @@ using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 var openAIkey = builder.Configuration["AzureOpenAI:ApiKeySecret"];
-var openAIendpoint = "https://fall2024-nrpucci-openai1.openai.azure.com/openai/deployments/gpt-35-turbo1/chat/completions?api-version=2024-08-01-preview";
+var openAIendpoint = "https://fall2024-nrpucci-openai1.openai.azure.com/";
 var openAIdeployment = "gpt-35-turbo1";
 
 // Add services to the container.

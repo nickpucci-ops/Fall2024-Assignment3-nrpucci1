@@ -69,7 +69,7 @@ namespace Fall2024_Assignment3_nrpucci1.Services
             string[] personas = { "is harsh", "loves romance", "loves comedy", "loves thrillers",
                 "loves fantasy", "loves sci fi", "absolutely hates movies with every fiber in his body", 
                 "thinks Mr. Maclane is an awesome professor", "loves action but does not love fantasy or sci-fi", 
-                "is tough but also can't stop himself from saying 'Cowabunga!' every couple words" };
+                "is tough but also can't stop himself from saying 'Yabba Dabba Dooo' every couple words" };
 
             ChatClient chatClient = _client.GetChatClient(_aiDeployment);
 
