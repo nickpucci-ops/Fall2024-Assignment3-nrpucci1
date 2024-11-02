@@ -22,9 +22,11 @@ namespace Fall2024_Assignment3_nrpucci1.Services
 
         public AIService(IConfiguration configuration)
         {
-            string apiKey = configuration["AzureOpenAI:ApiKeySecret"];
-            string apiEndpoint = configuration["AzureOpenAI:EndpointSecret"];
-            _aiDeployment = configuration["AzureOpenAI:DeploymentNameSecret"];
+            //check for environment variables first
+            string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY") ?? configuration["AzureOpenAI:ApiKey"];
+            string apiEndpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT") ?? configuration["AzureOpenAI:Endpoint"];
+            _aiDeployment = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? configuration["AzureOpenAI:DeploymentName"];
+
 
             _sentimentAnalyzer = new SentimentIntensityAnalyzer();
 
