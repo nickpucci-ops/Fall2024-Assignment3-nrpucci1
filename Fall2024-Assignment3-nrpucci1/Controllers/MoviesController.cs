@@ -54,7 +54,13 @@ namespace Fall2024_Assignment3_nrpucci1.Controllers
             // sentiment scores to labels
             var reviews = reviewsWithScores.Select(r => (
                 r.Review,
-                Sentiment: r.SentimentScore > 0.05 ? "Positive" : r.SentimentScore < -0.05 ? "Negative" : "Neutral"
+                Sentiment: 
+                r.SentimentScore >= 0.75 ? "Very Positive" 
+                : r.SentimentScore < 0.75 && r.SentimentScore >= 0.25 ? "Positive"
+                : r.SentimentScore < 0.25 && r.SentimentScore >= -0.25 ? "Neutral"
+                : r.SentimentScore < -0.25 && r.SentimentScore >= -0.75 ? "Negative" 
+                : r.SentimentScore < -0.75 ? "Very Negative"
+                : "Neutral"
             )).ToList();
 
             //overall sentiment
