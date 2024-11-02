@@ -17,15 +17,19 @@ namespace Fall2024_Assignment3_nrpucci1.Services
     {
         private readonly AzureOpenAIClient _client;
         private readonly SentimentIntensityAnalyzer _sentimentAnalyzer;
-        private readonly string _aiDeployment;
         private readonly bool _isApiConfigured; //for testing
+        private readonly string _aiDeployment;
 
-        public AIService(IConfiguration configuration)
+        public AIService(string key , string endpoint, string deployment)
         {
+            string apiKey = key;
+            string apiEndpoint = endpoint;
+            string _aiDeployment = deployment;
+
             //check for environment variables first
-            string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY") ?? configuration["AzureOpenAI:ApiKeySecret"];
-            string apiEndpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT") ?? configuration["AzureOpenAI:EndpointSecret"];
-            _aiDeployment = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? configuration["AzureOpenAI:DeploymentNameSecret"];
+            //string apiKey = Environment.GetEnvironmentVariable("AzureOpenAI:ApiKeySecret") ?? configuration["AzureOpenAI:ApiKeySecret"];
+            //string apiEndpoint = Environment.GetEnvironmentVariable("AzureOpenAI:EndpointSecret") ?? configuration["AzureOpenAI:EndpointSecret"];
+            //_aiDeployment = Environment.GetEnvironmentVariable("AzureOpenAI:DeploymentNameSecret") ?? configuration["AzureOpenAI:DeploymentNameSecret"];
 
             //string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
             //string apiEndpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");

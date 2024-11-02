@@ -4,9 +4,14 @@ using Fall2024_Assignment3_nrpucci1.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Fall2024_Assignment3_nrpucci1.Services;
+using Azure.AI.OpenAI;
+using static System.Net.WebRequestMethods;
 
 
 var builder = WebApplication.CreateBuilder(args);
+var openAIkey = builder.Configuration["AzureOpenAI:ApiKeySecret"];
+var openAIendpoint = "https://fall2024-nrpucci-openai1.openai.azure.com/openai/deployments/gpt-35-turbo1/chat/completions?api-version=2024-08-01-preview";
+var openAIdeployment = "gpt-35-turbo1";
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -21,7 +26,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<AIService>();
+//builder.Services.AddSingleton<AIService>();
+builder.Services.AddScoped<AIService>(provider =>
+    new AIService(
+        openAIkey,
+        openAIendpoint,
+        openAIdeployment));
 
 
 var app = builder.Build();
