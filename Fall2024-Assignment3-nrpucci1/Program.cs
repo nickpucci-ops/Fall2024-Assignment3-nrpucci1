@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 var openAIkey = builder.Configuration["AzureOpenAI:ApiKeySecret"];
 //var openAIendpoint = "https://fall2024-nrpucci-openai1.openai.azure.com/";
 var openAIendpoint = builder.Configuration["AzureOpenAI:EndpointSecret"];
-var openAIdeployment = "gpt-35-turbo1";
+var openAIdeployment = builder.Configuration["AzureOpenAI:DeploymentNameSecret"];
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
