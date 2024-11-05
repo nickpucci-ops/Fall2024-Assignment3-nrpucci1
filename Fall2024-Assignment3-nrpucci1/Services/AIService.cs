@@ -24,7 +24,7 @@ namespace Fall2024_Assignment3_nrpucci1.Services
         {
             string apiKey = key;
             string apiEndpoint = endpoint;
-            string _aiDeployment = deployment;
+            _aiDeployment = deployment;
 
             //check for environment variables first
             //string apiKey = Environment.GetEnvironmentVariable("AzureOpenAI:ApiKeySecret") ?? configuration["AzureOpenAI:ApiKeySecret"];
@@ -38,38 +38,37 @@ namespace Fall2024_Assignment3_nrpucci1.Services
 
             _sentimentAnalyzer = new SentimentIntensityAnalyzer();
 
-            if (!string.IsNullOrEmpty(apiEndpoint) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(_aiDeployment))
-            {
-                var apiCredential = new ApiKeyCredential(apiKey);
-                _client = new AzureOpenAIClient(new Uri(apiEndpoint), apiCredential);   
-                _isApiConfigured = true;
-            }
-            else
-            {
-                _isApiConfigured = false;
-            }
+            var apiCredential = new ApiKeyCredential(apiKey);
+            _client = new AzureOpenAIClient(new Uri(apiEndpoint), apiCredential);   
+            //if (!string.IsNullOrEmpty(apiEndpoint) && !string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(_aiDeployment))
+            //{
+            //    _isApiConfigured = true;
+            //}
+            //else
+            //{
+            //    _isApiConfigured = false;
+            //}
         }
 
         public async Task<List<(string Review, double SentimentScore)>> GenerateMovieReviewsAsync(string movieTitle, string releaseYear)
         {
             var reviews = new List<(string Review, double SentimentScore)>();
 
-            if (!_isApiConfigured)
-            {
-                // Return mock data
-                reviews = new List<(string Review, double SentimentScore)>
-                {
-                    ("An outstanding performance and a captivating story!", 0.85),
-                    ("The movie was okay, but could have been better.", 0.0),
-                    ("I didn't enjoy the film; it was quite disappointing.", -0.6),
-                };
-                return reviews;
-            }
+            //if (!_isApiConfigured)
+            //{
+            //    // Return mock data
+            //    reviews = new List<(string Review, double SentimentScore)>
+            //    {
+            //        ("An outstanding performance and a captivating story!", 0.85),
+            //        ("The movie was okay, but could have been better.", 0.0),
+            //        ("I didn't enjoy the film; it was quite disappointing.", -0.6),
+            //    };
+            //    return reviews;
+            //}
 
             string[] personas = { "is harsh", "loves romance", "loves comedy", "loves thrillers",
-                "loves fantasy", "loves sci fi", "absolutely hates movies with every fiber in his body", 
-                "thinks Mr. Maclane is an awesome professor", "loves action but does not love fantasy or sci-fi", 
-                "is tough but also can't stop himself from saying 'Yabba Dabba Dooo' every couple words" };
+                "loves fantasy", "loves sci-fi", "absolutely hates movies", 
+                "thinks Mr. Maclane is an awesome professor", "loves action but does not love fantasy or sci-fi" };
 
             ChatClient chatClient = _client.GetChatClient(_aiDeployment);
 
@@ -78,7 +77,7 @@ namespace Fall2024_Assignment3_nrpucci1.Services
                 var messages = new ChatMessage[]
                 {
                     new SystemChatMessage($"You are a film reviewer and film critic who {persona}."),
-                    new UserChatMessage($"How would you rate the movie {movieTitle} released in {releaseYear} out of 10 in less than 175 words?")
+                    new UserChatMessage($"How would you rate the movie {movieTitle} released in {releaseYear} out of 10 in less than 100 words?")
                 };
 
                 var chatCompletionOptions = new ChatCompletionOptions
@@ -104,23 +103,25 @@ namespace Fall2024_Assignment3_nrpucci1.Services
         public async Task<List<(string Tweet, double SentimentScore)>> GenerateActorTweetsAsync(string actorName)
         {
             var tweets = new List<(string Tweet, double SentimentScore)>();
-            if (!_isApiConfigured)
-            {
-                // Return mock data
-                tweets = new List<(string Tweet, double SentimentScore)>
-                {
-                    ($"Just watched a movie starring {actorName}, and it was fantastic!", 0.9),
-                    ($"{actorName} is so overrated.", -0.7),
-                    ($"{actorName}'s latest performance was absolutely brilliant.", 0.8),
-                };
-                return tweets;
-            }
+            //if (!_isApiConfigured)
+            //{
+            //    // Return mock data
+            //    tweets = new List<(string Tweet, double SentimentScore)>
+            //    {
+            //        ($"Just watched a movie starring {actorName}, and it was fantastic!", 0.9),
+            //        ($"{actorName} is so overrated.", -0.7),
+            //        ($"{actorName}'s latest performance was absolutely brilliant.", 0.8),
+            //    };
+            //    return tweets;
+            //}
 
             ChatClient chatClient = _client.GetChatClient(_aiDeployment);
 
             var messages = new ChatMessage[]
             {
-                new SystemChatMessage($"You represent the Twitter social media platform. Generate an answer with a valid JSON formatted array of objects containing the tweet and username. The response should start with [."),
+                new SystemChatMessage($"You represent the Twitter social media platform. " +
+                $"Generate an answer with a valid JSON formatted array of objects containing the tweet and username. " +
+                $"The response should start with [. Only respond with JSON. Do not reply to the prompt otherwise."),
                 new UserChatMessage($"Generate 20 tweets from a variety of users about the actor {actorName}.")
             };
 

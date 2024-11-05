@@ -9,6 +9,10 @@ using static System.Net.WebRequestMethods;
 
 
 var builder = WebApplication.CreateBuilder(args);
+//var openAIkey = "";
+//var openAIendpoint = "";
+//var openAIdeployment = "";
+
 var openAIkey = builder.Configuration["AzureOpenAI:ApiKeySecret"];
 var openAIendpoint = "https://fall2024-nrpucci-openai1.openai.azure.com/";
 var openAIdeployment = "gpt-35-turbo1";
