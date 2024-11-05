@@ -14,7 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 //var openAIdeployment = "";
 
 var openAIkey = builder.Configuration["AzureOpenAI:ApiKeySecret"];
-var openAIendpoint = "https://fall2024-nrpucci-openai1.openai.azure.com/";
+//var openAIendpoint = "https://fall2024-nrpucci-openai1.openai.azure.com/";
+var openAIendpoint = builder.Configuration["AzureOpenAI:EndpointSecret"];
 var openAIdeployment = "gpt-35-turbo1";
 
 // Add services to the container.
